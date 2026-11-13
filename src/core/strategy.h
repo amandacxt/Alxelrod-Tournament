@@ -7,15 +7,21 @@
 
 namespace strategies 
 {
-    Choice getChoice(const StrategyName& strategy, const std::vector<RoundResult>& history);
+    Choice getChoice(const Player& player,
+                     const std::vector<RoundResult>& history,
+                     size_t currentRound);
 
     Choice runAllDAlgorithm();
 
-     Choice runRandomAlgorithm();
+    Choice runRandomAlgorithm();
 
-/*    Choice runTitForTatAlgorithm();
+    /* For the first round returns C, otherwise,
+      returns the same choice as the other player in the previous round */
+    Choice runTitForTatAlgorithm(const Player& player,
+                                 const std::vector<RoundResult>& history,
+                                 size_t currentRound);
 
-    Choice runTesterAlgorithm();
+    /*Choice runTesterAlgorithm();
 
     Choice runJossAlgorithm(); */
 

@@ -20,21 +20,21 @@ void Tournament::run(Player* playerA, Player* playerB)
     }
 }
 
-void Tournament::runRound(size_t currentTurn)
+void Tournament::runRound(size_t currentRound)
 {
-    const auto choiceA = strategies::getChoice(m_playerA->strategy(), m_runsHistory);
-    const auto choiceB = strategies::getChoice(m_playerB->strategy(), m_runsHistory);
+    const auto choiceA = strategies::getChoice(*m_playerA, m_runsHistory, currentRound);
+    const auto choiceB = strategies::getChoice(*m_playerB, m_runsHistory, currentRound);
 
-    storeResult(currentTurn, RoundResult(choiceA, choiceB));
+    storeResult(currentRound, RoundResult({m_playerA->id(), choiceA}, {m_playerB->id(), choiceB}));
 
     auto [pointsA, pointsB] = pointsFromResult(choiceA, choiceB);
     m_playerA->increasePointsBy(pointsA);
     m_playerB->increasePointsBy(pointsB);
 }
 
-void Tournament::storeResult(size_t currentTurn, const RoundResult& rr)
+void Tournament::storeResult(size_t currentRound, const RoundResult& rr)
 {
-    m_runsHistory[currentTurn - 1] = rr;
+    m_runsHistory[currentRound] = rr;
 }
 
 std::tuple<int, int> Tournament::pointsFromResult(const Choice choiceA, const Choice choiceB)

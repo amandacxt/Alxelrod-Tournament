@@ -24,31 +24,34 @@ inline std::ostream& operator<<(std::ostream& os, Choice c)
 
 struct RoundResult
 {
-    RoundResult(Choice a, Choice b)
+    RoundResult(std::pair<int, Choice> a, std::pair<int, Choice> b)
     {
         playerA = a;
         playerB = b;
     }
 
-    Choice playerA;
-    Choice playerB;
+    std::pair<int, Choice> playerA;
+    std::pair<int, Choice> playerB;
 };
 
 class Player
 {
   public:
-    Player() : m_points(0), m_strategy(NONE) {};
+    Player(int id) : m_id(id), m_points(0), m_strategy(NONE) {};
 
-    Player(StrategyName strategy) : m_points(0), m_strategy(strategy) {};
+    Player(int id, StrategyName strategy) : m_id(id), m_points(0), m_strategy(strategy) {};
 
-    StrategyName strategy() const { return m_strategy;}
+    int id() const { return m_id; }
     int points() const { return m_points; }
+
+    StrategyName strategy() const { return m_strategy; }
 
     void increasePointsBy(unsigned value) { m_points += value; }
 
     void changeStrategy(StrategyName strategy) { m_strategy = strategy; }
 
   private:
+    int m_id;
     int m_points;
     StrategyName m_strategy;
 };

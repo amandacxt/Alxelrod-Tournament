@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 
-Choice strategies::getChoice(const StrategyName& strategy)
+Choice strategies::getChoice(const StrategyName& strategy, const std::vector<RoundResult>& history)
 {
     switch (strategy) 
     {

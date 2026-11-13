@@ -9,32 +9,38 @@
     #define DEBUG_RESULTS(x) ((void)0)
 #endif
 
+
 void Tournament::run(Player* playerA, Player* playerB)
 {
     m_playerA = playerA;
     m_playerB = playerB;
     for (size_t round = 0; round < m_rounds; ++round) 
     {
-        runTurn(round);
+        runRound(round);
     }
 }
 
-
-void Tournament::runTurn(size_t currentTurn)
+void Tournament::runRound(size_t currentTurn)
 {
-    const auto choiceA = strategies::getChoice(m_playerA->strategy());
-    const auto choiceB = strategies::getChoice(m_playerB->strategy());
+    const auto choiceA = strategies::getChoice(m_playerA->strategy(), m_runsHistory);
+    const auto choiceB = strategies::getChoice(m_playerB->strategy(), m_runsHistory);
 
-    DEBUG_RESULTS("Choice Player A: " << choiceA << "\n Choice Player B: " << choiceB);
+    storeResult(currentTurn, RoundResult(choiceA, choiceB));
 
-    auto [pointsA, pointsB] = result(choiceA, choiceB);
+    auto [pointsA, pointsB] = pointsFromResult(choiceA, choiceB);
     m_playerA->increasePointsBy(pointsA);
     m_playerB->increasePointsBy(pointsB);
 }
 
-
-std::tuple<int, int> Tournament::result(const Choice choiceA, const Choice choiceB)
+void Tournament::storeResult(size_t currentTurn, const RoundResult& rr)
 {
+    m_runsHistory[currentTurn - 1] = rr;
+}
+
+std::tuple<int, int> Tournament::pointsFromResult(const Choice choiceA, const Choice choiceB)
+{
+    DEBUG_RESULTS("Choice Player A: " << choiceA << "\n Choice Player B: " << choiceB);
+
     if (choiceA == Choice::NO_CHOICE || choiceB == Choice::NO_CHOICE)
     {
         std::cout << "ISSUE DECIDING CHOICE";

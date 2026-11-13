@@ -22,6 +22,18 @@ inline std::ostream& operator<<(std::ostream& os, Choice c)
     return os << "UNKNOWN";
 }
 
+struct RoundResult
+{
+    RoundResult(Choice a, Choice b)
+    {
+        playerA = a;
+        playerB = b;
+    }
+
+    Choice playerA;
+    Choice playerB;
+};
+
 class Player
 {
   public:

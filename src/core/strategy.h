@@ -1,11 +1,13 @@
 #pragma once
 
+#include <vector>
+
 #include "../shared/strategyName.h"
 #include "../shared/player.h"
 
 namespace strategies 
 {
-    Choice getChoice(const StrategyName& strategy);
+    Choice getChoice(const StrategyName& strategy, const std::vector<RoundResult>& history);
 
     Choice runAllDAlgorithm();
 

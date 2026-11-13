@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 
 #include "strategyName.h"
 
@@ -22,17 +23,9 @@ inline std::ostream& operator<<(std::ostream& os, Choice c)
     return os << "UNKNOWN";
 }
 
-struct RoundResult
-{
-    RoundResult(std::pair<int, Choice> a, std::pair<int, Choice> b)
-    {
-        playerA = a;
-        playerB = b;
-    }
 
-    std::pair<int, Choice> playerA;
-    std::pair<int, Choice> playerB;
-};
+using RoundResult = std::map<int, Choice>;
+
 
 class Player
 {

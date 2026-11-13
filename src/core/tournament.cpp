@@ -25,7 +25,10 @@ void Tournament::runRound(size_t currentRound)
     const auto choiceA = strategies::getChoice(*m_playerA, m_runsHistory, currentRound);
     const auto choiceB = strategies::getChoice(*m_playerB, m_runsHistory, currentRound);
 
-    storeResult(currentRound, RoundResult({m_playerA->id(), choiceA}, {m_playerB->id(), choiceB}));
+    auto result = RoundResult();
+    result.emplace(m_playerA->id(), choiceA);
+    result.emplace(m_playerB->id(), choiceB);
+    storeResult(currentRound, result);
 
     auto [pointsA, pointsB] = pointsFromResult(choiceA, choiceB);
     m_playerA->increasePointsBy(pointsA);

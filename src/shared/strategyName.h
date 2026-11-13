@@ -9,10 +9,3 @@ enum StrategyName
     JOSS,
     NONE
 };
-
-enum Choice
-{
-    C, // Cooperate
-    D,  // Disclose
-    NO_CHOICE
-};

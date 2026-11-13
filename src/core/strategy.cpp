@@ -1,32 +1,31 @@
 #include "strategy.h"
 
 
-static Choice strategies::getChoice(const StrategyName& strategy)
+Choice strategies::getChoice(const StrategyName& strategy)
 {
     switch (strategy) 
     {
         case StrategyName::ALL_D:
-            return strategies::runAllDAlgotithm();
-            break;
+            return strategies::runAllDAlgorithm();
 
-        case StrategyName::RANDOM:
+/*         case StrategyName::RANDOM:
             return strategies::runRandomAlgotithm();
-            break;
         
         case StrategyName::TIT_FOR_TAT:
             return strategies::runTitForTatAlgotithm();
-            break;
 
         case StrategyName::TESTER:
             return strategies::runTesterAlgotithm();
-            break;
         
         case StrategyName::JOSS:
-            return strategies::runJossAlgotithm();
-            break;
+            return strategies::runJossAlgotithm(); */
         
         default:
             return Choice::NO_CHOICE;
-            break;
-    }
+    };
+}
+
+Choice strategies::runAllDAlgorithm()
+{
+    return Choice::D;
 }

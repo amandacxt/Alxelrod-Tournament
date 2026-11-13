@@ -1,19 +1,20 @@
 #pragma once
 
 #include "../shared/strategyName.h"
+#include "../shared/player.h"
 
 namespace strategies 
 {
-    static Choice getChoice(const StrategyName& strategy);
+    Choice getChoice(const StrategyName& strategy);
 
-    static Choice runAllDAlgotithm();
+    Choice runAllDAlgorithm();
 
-    static Choice runRandomAlgotithm();
+/*     Choice runRandomAlgorithm();
 
-    static Choice runTitForTatAlgotithm();
+    Choice runTitForTatAlgorithm();
 
-    static Choice runTesterAlgotithm();
+    Choice runTesterAlgorithm();
 
-    static Choice runJossAlgotithm();
+    Choice runJossAlgorithm(); */
 
 };

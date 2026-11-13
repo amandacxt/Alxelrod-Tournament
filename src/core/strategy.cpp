@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdlib>
 
+#define N_ALGORITHMS 5
 
 int getCompetitorId(int playerId, const std::vector<RoundResult>& history)
 {
@@ -27,7 +28,15 @@ Choice strategies::getChoice(const Player& player,
                              const std::vector<RoundResult>& history,
                              size_t currentRound)
 {
-    switch (player.strategy())
+    return getChoice(player, player.strategy(), history, currentRound);
+}
+
+Choice strategies::getChoice(const Player& player,
+                             const StrategyName strategy,
+                             const std::vector<RoundResult>& history,
+                             size_t currentRound)
+{
+    switch (strategy)
     {
         case StrategyName::ALL_D:
             return strategies::runAllDAlgorithm();
@@ -45,7 +54,7 @@ Choice strategies::getChoice(const Player& player,
             return strategies::runJossAlgorithm(player, history, currentRound);
         
         default:
-            return Choice::NO_CHOICE;
+            return chooseAlgorithmRandomly(player, history, currentRound);
     };
 }
 
@@ -107,4 +116,23 @@ Choice strategies::runJossAlgorithm(const Player& player,
     }
 
     return rand() % 10 == 0 ? Choice::D : Choice::C;
+}
+
+
+Choice strategies::chooseAlgorithmRandomly(const Player& player,
+                                    const std::vector<RoundResult>& history,
+                                    size_t currentRound)
+{
+    static const StrategyName all[] = 
+    {
+        StrategyName::ALL_D,
+        StrategyName::RANDOM,
+        StrategyName::TIT_FOR_TAT,
+        StrategyName::TESTER,
+        StrategyName::JOSS
+    };
+
+    auto strategy = all[rand() % N_ALGORITHMS];
+
+    return getChoice(player, strategy, history, currentRound);
 }

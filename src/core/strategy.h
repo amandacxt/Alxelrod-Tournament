@@ -10,6 +10,11 @@ namespace strategies
     Choice getChoice(const Player& player,
                      const std::vector<RoundResult>& history,
                      size_t currentRound);
+    
+    Choice getChoice(const Player& player,
+                     const StrategyName strategy,
+                     const std::vector<RoundResult>& history,
+                     size_t currentRound);
 
     /* Returns only choice D*/
     Choice runAllDAlgorithm();
@@ -33,4 +38,7 @@ namespace strategies
                             const std::vector<RoundResult>& history,
                             size_t currentRound);
 
+    Choice chooseAlgorithmRandomly(const Player& player,
+                                   const std::vector<RoundResult>& history,
+                                   size_t currentRound);
 };

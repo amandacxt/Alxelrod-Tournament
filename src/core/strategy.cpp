@@ -41,8 +41,8 @@ Choice strategies::getChoice(const Player& player,
         case StrategyName::TESTER:
             return strategies::runTesterAlgorithm(player, history, currentRound);
         
-    /*    case StrategyName::JOSS:
-            return strategies::runJossAlgorithm(); */
+        case StrategyName::JOSS:
+            return strategies::runJossAlgorithm(player, history, currentRound);
         
         default:
             return Choice::NO_CHOICE;
@@ -94,4 +94,17 @@ Choice strategies::runTesterAlgorithm(const Player& player,
 
     // Follows order CCD starting from round nº1
     return ((currentRound - 1) % 3 == 2) ? Choice::D : Choice::C;
+}
+
+Choice strategies::runJossAlgorithm(const Player& player,
+                                    const std::vector<RoundResult>& history,
+                                    size_t currentRound)
+{
+    auto tftResult = runTitForTatAlgorithm(player, history, currentRound);
+    if(tftResult == Choice::D)
+    {
+        return tftResult;
+    }
+
+    return rand() % 10 == 0 ? Choice::D : Choice::C;
 }

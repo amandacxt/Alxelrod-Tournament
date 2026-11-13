@@ -29,6 +29,8 @@ namespace strategies
                               const std::vector<RoundResult>& history,
                               size_t currentRound);
 
-    /*Choice runJossAlgorithm(); */
+    Choice runJossAlgorithm(const Player& player,
+                            const std::vector<RoundResult>& history,
+                            size_t currentRound);
 
 };

@@ -7,8 +7,28 @@
 // Guimaraes Caixeta Silva Amanda, 2026
 // -------------------------------------------
 
+#include <iostream>
+
+#include "shared/strategyName.h"
+#include "shared/player.h"
+
+#include "core/tournament.h"
+
+#if false
+    #define PRINT_POINTS(x) std::cout << x << std::endl
+#else
+    #define PRINT_POINTS(x) ((void)0)
+#endif
 
 int main(int argc, char ** argv)
 {
+    auto tournament = new Tournament(2);
+    auto pa = new Player(StrategyName::ALL_D);
+    auto pb = new Player(StrategyName::ALL_D);
+    tournament->run(pa,pb);
+
+    PRINT_POINTS("Player A: " << pa->points() << "\nPlayer B: " << pb->points());
+
+
     return 0;
 }

@@ -1,4 +1,5 @@
 #include "strategy.h"
+#include <cstdlib>
 
 
 Choice strategies::getChoice(const StrategyName& strategy)
@@ -8,17 +9,17 @@ Choice strategies::getChoice(const StrategyName& strategy)
         case StrategyName::ALL_D:
             return strategies::runAllDAlgorithm();
 
-/*         case StrategyName::RANDOM:
-            return strategies::runRandomAlgotithm();
+        case StrategyName::RANDOM:
+            return strategies::runRandomAlgorithm();
         
-        case StrategyName::TIT_FOR_TAT:
-            return strategies::runTitForTatAlgotithm();
+    /*    case StrategyName::TIT_FOR_TAT:
+            return strategies::runTitForTatAlgorithm();
 
         case StrategyName::TESTER:
-            return strategies::runTesterAlgotithm();
+            return strategies::runTesterAlgorithm();
         
         case StrategyName::JOSS:
-            return strategies::runJossAlgotithm(); */
+            return strategies::runJossAlgorithm(); */
         
         default:
             return Choice::NO_CHOICE;
@@ -28,4 +29,10 @@ Choice strategies::getChoice(const StrategyName& strategy)
 Choice strategies::runAllDAlgorithm()
 {
     return Choice::D;
+}
+
+Choice strategies::runRandomAlgorithm()
+{
+    auto value = rand() % 2;
+    return (value == 0 ? Choice::D : Choice::C);
 }

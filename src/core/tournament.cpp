@@ -3,13 +3,17 @@
 #include "strategy.h"
 #include <iostream>
 
-
+#if true
+    #define DEBUG_RESULTS(x) std::cout << x << std::endl
+#else
+    #define DEBUG_RESULTS(x) ((void)0)
+#endif
 
 void Tournament::run(Player* playerA, Player* playerB)
 {
     m_playerA = playerA;
     m_playerB = playerB;
-    for (auto round = 0; round < m_rounds; ++round) 
+    for (size_t round = 0; round < m_rounds; ++round) 
     {
         runTurn(round);
     }
@@ -20,6 +24,8 @@ void Tournament::runTurn(size_t currentTurn)
 {
     const auto choiceA = strategies::getChoice(m_playerA->strategy());
     const auto choiceB = strategies::getChoice(m_playerB->strategy());
+
+    DEBUG_RESULTS("Choice Player A: " << choiceA << "\n Choice Player B: " << choiceB);
 
     auto [pointsA, pointsB] = result(choiceA, choiceB);
     m_playerA->increasePointsBy(pointsA);

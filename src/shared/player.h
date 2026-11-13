@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "strategyName.h"
 
 enum Choice
@@ -8,6 +10,17 @@ enum Choice
     D,  // Disclose
     NO_CHOICE
 };
+
+inline std::ostream& operator<<(std::ostream& os, Choice c)
+{
+    switch (c)
+    {
+        case Choice::C:         return os << "C";
+        case Choice::D:         return os << "D";
+        case Choice::NO_CHOICE: return os << "NO_CHOICE";
+    }
+    return os << "UNKNOWN";
+}
 
 class Player
 {

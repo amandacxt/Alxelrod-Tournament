@@ -9,9 +9,9 @@ namespace strategies
 
     Choice runAllDAlgorithm();
 
-/*     Choice runRandomAlgorithm();
+     Choice runRandomAlgorithm();
 
-    Choice runTitForTatAlgorithm();
+/*    Choice runTitForTatAlgorithm();
 
     Choice runTesterAlgorithm();
 

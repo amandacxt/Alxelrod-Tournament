@@ -15,19 +15,24 @@
 #include "core/tournament.h"
 
 #if false
-    #define PRINT_POINTS(x) std::cout << x << std::endl
+    #define DEBUG_POINTS(x) std::cout << x << std::endl
 #else
-    #define PRINT_POINTS(x) ((void)0)
+    #define DEBUG_POINTS(x) ((void)0)
 #endif
 
 int main(int argc, char ** argv)
 {
     auto tournament = new Tournament(2);
-    auto pa = new Player(StrategyName::ALL_D);
-    auto pb = new Player(StrategyName::ALL_D);
+    srand(time(nullptr));
+
+    //auto pa = new Player(StrategyName::ALL_D);
+    //auto pb = new Player(StrategyName::ALL_D);
+
+    auto pa = new Player(StrategyName::RANDOM);
+    auto pb = new Player(StrategyName::RANDOM);
     tournament->run(pa,pb);
 
-    PRINT_POINTS("Player A: " << pa->points() << "\nPlayer B: " << pb->points());
+    DEBUG_POINTS("Player A: " << pa->points() << "\nPlayer B: " << pb->points());
 
 
     return 0;

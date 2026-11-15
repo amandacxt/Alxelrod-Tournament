@@ -26,6 +26,7 @@ namespace
 const size_t TOURS  = 5;
 const size_t ROUNDS = 200;
 const double CONTINUE_PROBABILITY = 0.995;
+const double NOISE_PROBABILITY = 0.05;
 
 const std::vector<StrategyName> ALL_STRATEGIES = {
     StrategyName::ALL_D,
@@ -45,6 +46,7 @@ void printUsage(const char* program)
               << "  " << program << " <sA> <sB>    player A vs player B\n"
               << "  " << program << " all          round-robin tournament\n"
               << "  " << program << " all inconnu  round-robin tournament with unknown horizon \n"
+              << "  " << program << " all bruit    round-robin tournament with noise\n"
               << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=TIT_FOR_TWO_TATS 6=GRUDGER 7=NONE(random)\n";
 }
 
@@ -74,9 +76,12 @@ bool parseStrategy(const char* arg, StrategyName& out)
 }
 
 
-std::pair<int, int> playMatch(StrategyName a, StrategyName b, double continueProbability = 1)
+std::pair<int, int> playMatch(StrategyName a, 
+                              StrategyName b, 
+                              double continueProbability = 1.0, 
+                              double noiseProbability = 0.0)
 {
-    Tournament tournament(TOURS, ROUNDS, continueProbability);
+    Tournament tournament(TOURS, ROUNDS, continueProbability, noiseProbability);
     Player pa(1, a);
     Player pb(2, b);
     tournament.run(&pa, &pb);
@@ -85,7 +90,7 @@ std::pair<int, int> playMatch(StrategyName a, StrategyName b, double continuePro
 }
 
 
-void runRoundRobin(double continueProbability = 1.0)
+void runRoundRobin(double continueProbability = 1.0, double noiseProbability = 0.0)
 {
     std::vector<int> totalPoints(ALL_STRATEGIES.size(), 0);
 
@@ -94,7 +99,8 @@ void runRoundRobin(double continueProbability = 1.0)
         for (size_t j = i + 1; j < ALL_STRATEGIES.size(); ++j)
         {
             std::cout << "\n " << label(ALL_STRATEGIES[i]) << " vs " << label(ALL_STRATEGIES[j]) << " \n";
-            const auto [pointsA, pointsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j], continueProbability);
+            const auto [pointsA, pointsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j], 
+                                                      continueProbability, noiseProbability);
             totalPoints[i] += pointsA;
             totalPoints[j] += pointsB;
         }
@@ -132,6 +138,12 @@ int main(int argc, char ** argv)
     if (argc == 3 && std::string(argv[1]) == "all" && std::string(argv[2]) == "inconnu")
     {
         runRoundRobin(CONTINUE_PROBABILITY);
+        return 0;
+    }
+
+    if (argc == 3 && std::string(argv[1]) == "all" && std::string(argv[2]) == "bruit")
+    {
+        runRoundRobin(1.0, NOISE_PROBABILITY);   // fixed horizon + noise
         return 0;
     }
 

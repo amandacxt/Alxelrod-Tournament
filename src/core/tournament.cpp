@@ -70,8 +70,11 @@ void Tournament::run(Player* playerA, Player* playerB)
 
 void Tournament::runRound(size_t currentRound)
 {
-    const auto choiceA = strategies::getChoice(*m_playerA, m_runsHistory, currentRound);
-    const auto choiceB = strategies::getChoice(*m_playerB, m_runsHistory, currentRound);
+    auto choiceA = strategies::getChoice(*m_playerA, m_runsHistory, currentRound);
+    auto choiceB = strategies::getChoice(*m_playerB, m_runsHistory, currentRound);
+
+    choiceA = applyNoise(choiceA);
+    choiceB = applyNoise(choiceB);
 
     auto result = RoundResult();
     result.emplace(m_playerA->id(), choiceA);
@@ -120,4 +123,15 @@ std::tuple<int, int> Tournament::pointsFromResult(const Choice choiceA, const Ch
 
     std::cout << "INVALID CHOICE VALUES";
     return {0,0};
+}
+
+Choice Tournament::applyNoise(Choice choice) const
+{
+    if (m_noiseProbability <= 0.0 || choice == Choice::NO_CHOICE)
+        return choice;
+
+    if ((rand() / (RAND_MAX + 1.0)) < m_noiseProbability)
+        return (choice == Choice::C) ? Choice::D : Choice::C;
+
+    return choice;
 }

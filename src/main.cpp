@@ -95,7 +95,7 @@ void runRoundRobin()
         }
     }
 
-    std::cout << "\n ROUND-ROBIN SUMMARY" << std::endl;
+    std::cout << "\n--- ALXELROD TOURNAMENT SUMMARY ---" << std::endl;
     for (size_t i = 0; i < ALL_STRATEGIES.size(); ++i)
         std::cout << label(ALL_STRATEGIES[i]) << ": " << totalWins[i] << std::endl;
 }
@@ -104,7 +104,8 @@ void runRoundRobin()
 
 int main(int argc, char ** argv)
 {
-    srand(time(nullptr));
+    const unsigned int SEED = 42;
+    srand(SEED);
 
     if (argc < 2 || argc > 3)
     {

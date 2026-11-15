@@ -29,13 +29,21 @@ void Tournament::startTour()
     clearHistory();
 }
 
-void Tournament::endTour(int currentTour)
+void Tournament::endTour(int currentTour, size_t roundsPlayed)
 {
     DEBUG_POINTS("Player A: " << m_playerA->points() << "\nPlayer B: " << m_playerB->points());
 
-    std::cout << "\bTOUR " << currentTour 
+    std::cout << "\bTOUR " << currentTour << " (" << roundsPlayed << " rounds)"
             << "\n\b Player A: " << m_playerA->points() 
             << " vs Player B: " << m_playerB->points() <<std::endl;
+}
+
+bool Tournament::shouldContinue(size_t roundsPlayed) const
+{
+    if (!isUnknownHorizon())
+        return roundsPlayed < m_rounds;
+
+    return (rand() / (RAND_MAX + 1.0)) < m_continueProbability;
 }
 
 void Tournament::run(Player* playerA, Player* playerB)
@@ -48,11 +56,15 @@ void Tournament::run(Player* playerA, Player* playerB)
     for (size_t tour = 0; tour < m_tours; ++tour)
     {
         startTour();
-        for (size_t round = 0; round < m_rounds; ++round)
+        size_t round = 0;
+
+        do
         {
             runRound(round);
-        }
-        endTour(tour);
+            ++round;
+        } while (shouldContinue(round));
+
+        endTour(tour, round);
     }
 }
 
@@ -64,16 +76,16 @@ void Tournament::runRound(size_t currentRound)
     auto result = RoundResult();
     result.emplace(m_playerA->id(), choiceA);
     result.emplace(m_playerB->id(), choiceB);
-    storeResult(currentRound, result);
+    storeResult(result);
 
     auto [pointsA, pointsB] = pointsFromResult(choiceA, choiceB);
     m_playerA->increasePointsBy(pointsA);
     m_playerB->increasePointsBy(pointsB);
 }
 
-void Tournament::storeResult(size_t currentRound, const RoundResult& rr)
+void Tournament::storeResult(const RoundResult& rr)
 {
-    m_runsHistory[currentRound] = rr;
+    m_runsHistory.push_back(rr);
 }
 
 std::tuple<int, int> Tournament::pointsFromResult(const Choice choiceA, const Choice choiceB)

@@ -25,6 +25,7 @@ namespace
 
 const size_t TOURS  = 5;
 const size_t ROUNDS = 200;
+const double CONTINUE_PROBABILITY = 0.995;
 
 const std::vector<StrategyName> ALL_STRATEGIES = {
     StrategyName::ALL_D,
@@ -40,9 +41,10 @@ const std::vector<StrategyName> ALL_STRATEGIES = {
 void printUsage(const char* program)
 {
     std::cout << "Usage:\n"
-              << "  " << program << " <s>        both players use strategy s\n"
-              << "  " << program << " <sA> <sB>  player A vs player B\n"
-              << "  " << program << " all        round-robin tournament\n"
+              << "  " << program << " <s>          both players use strategy s\n"
+              << "  " << program << " <sA> <sB>    player A vs player B\n"
+              << "  " << program << " all          round-robin tournament\n"
+              << "  " << program << " all inconnu  round-robin tournament with unknown horizon \n"
               << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=TIT_FOR_TWO_TATS 6=GRUDGER 7=NONE(random)\n";
 }
 
@@ -72,9 +74,9 @@ bool parseStrategy(const char* arg, StrategyName& out)
 }
 
 
-std::pair<int, int> playMatch(StrategyName a, StrategyName b)
+std::pair<int, int> playMatch(StrategyName a, StrategyName b, double continueProbability = 1)
 {
-    Tournament tournament(TOURS, ROUNDS);
+    Tournament tournament(TOURS, ROUNDS, continueProbability);
     Player pa(1, a);
     Player pb(2, b);
     tournament.run(&pa, &pb);
@@ -83,7 +85,7 @@ std::pair<int, int> playMatch(StrategyName a, StrategyName b)
 }
 
 
-void runRoundRobin()
+void runRoundRobin(double continueProbability = 1.0)
 {
     std::vector<int> totalPoints(ALL_STRATEGIES.size(), 0);
 
@@ -92,7 +94,7 @@ void runRoundRobin()
         for (size_t j = i + 1; j < ALL_STRATEGIES.size(); ++j)
         {
             std::cout << "\n " << label(ALL_STRATEGIES[i]) << " vs " << label(ALL_STRATEGIES[j]) << " \n";
-            const auto [pointsA, pointsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j]);
+            const auto [pointsA, pointsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j], continueProbability);
             totalPoints[i] += pointsA;
             totalPoints[j] += pointsB;
         }
@@ -125,6 +127,12 @@ int main(int argc, char ** argv)
     {
         printUsage(argv[0]);
         return 1;
+    }
+
+    if (argc == 3 && std::string(argv[1]) == "all" && std::string(argv[2]) == "inconnu")
+    {
+        runRoundRobin(CONTINUE_PROBABILITY);
+        return 0;
     }
 
     if (argc == 2 && std::string(argv[1]) == "all")

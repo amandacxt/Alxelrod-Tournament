@@ -10,25 +10,34 @@
 class Tournament
 {
   public: 
-    Tournament(size_t tours, size_t rounds) : m_tours(tours), m_rounds(rounds), m_playerA(nullptr), m_playerB(nullptr)
+    Tournament(size_t tours, size_t rounds, double continueProbability = 1.0) :
+        m_tours(tours), 
+        m_rounds(rounds),
+        m_continueProbability(continueProbability),
+        m_playerA(nullptr), 
+        m_playerB(nullptr)
     {
         clearHistory();
     };
 
     void run(Player* playerA, Player* playerB);
 
+    bool isUnknownHorizon() const { return m_continueProbability < 1.0; }
+
   private:
     void startTour();
-    void endTour(int currentTour);
+    void endTour(int currentTour, size_t roundsPlayed);
     void runRound(size_t currentRound);
+    bool shouldContinue(size_t roundsPlayed) const;
 
-    void storeResult(size_t currentTurn, const RoundResult& rr);
-    void clearHistory()  { m_runsHistory.assign(m_rounds, RoundResult()); }
+    void storeResult(const RoundResult& rr);
+    void clearHistory()  { m_runsHistory.clear(); }
     std::tuple<int, int> pointsFromResult(const Choice choiceA, const Choice choiceB);
 
   private:
     size_t m_tours;
     size_t m_rounds;
+    double m_continueProbability;
     std::vector<RoundResult> m_runsHistory;
     Player* m_playerA;
     Player* m_playerB;

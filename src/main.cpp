@@ -14,26 +14,113 @@
 
 #include "core/tournament.h"
 
-#if false
-    #define DEBUG_POINTS(x) std::cout << x << std::endl
-#else
-    #define DEBUG_POINTS(x) ((void)0)
-#endif
+
+namespace
+{
+
+const size_t TOURS  = 1;
+const size_t ROUNDS = 5;
+
+const std::vector<StrategyName> ALL_STRATEGIES = {
+    StrategyName::ALL_D,
+    StrategyName::RANDOM,
+    StrategyName::TIT_FOR_TAT,
+    StrategyName::TESTER,
+    StrategyName::JOSS
+};
+
+
+void printUsage(const char* program)
+{
+    std::cout << "Usage:\n"
+              << "  " << program << " <s>        both players use strategy s\n"
+              << "  " << program << " <sA> <sB>  player A vs player B\n"
+              << "  " << program << " all        round-robin tournament\n"
+              << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=NONE (random)\n";
+}
+
+
+bool parseStrategy(const char* arg, StrategyName& out)
+{
+    char* end = nullptr;
+    const long n = std::strtol(arg, &end, 10);
+
+    if (end == arg || *end != '\0' || n < 0 || n > static_cast<long>(StrategyName::NONE))
+        return false;
+
+    out = static_cast<StrategyName>(n);
+    std::cout << "\n " << label(out) << std::endl;
+    return true;
+}
+
+
+std::pair<int, int> playMatch(StrategyName a, StrategyName b)
+{
+    Tournament tournament(TOURS, ROUNDS);
+    Player pa(1, a);
+    Player pb(2, b);
+    tournament.run(&pa, &pb);
+
+    return {pa.wins(), pb.wins()};
+}
+
+
+void runRoundRobin()
+{
+    std::vector<int> totalWins(ALL_STRATEGIES.size(), 0);
+
+    for (size_t i = 0; i < ALL_STRATEGIES.size(); ++i)
+    {
+        for (size_t j = i + 1; j < ALL_STRATEGIES.size(); ++j)
+        {
+            std::cout << "\n " << label(ALL_STRATEGIES[i]) << " vs " << label(ALL_STRATEGIES[j]) << " \n";
+            const auto [winsA, winsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j]);
+            totalWins[i] += winsA;
+            totalWins[j] += winsB;
+        }
+    }
+
+    std::cout << "\n ROUND-ROBIN SUMMARY" << std::endl;
+    for (size_t i = 0; i < ALL_STRATEGIES.size(); ++i)
+        std::cout << label(ALL_STRATEGIES[i]) << ": " << totalWins[i] << std::endl;
+}
+
+} // end namespace
 
 int main(int argc, char ** argv)
 {
-    auto tournament = new Tournament(3 /*tours=*/, 10 /*rounds=*/);
     srand(time(nullptr));
 
-    //auto pa = new Player(StrategyName::ALL_D);
-    //auto pb = new Player(StrategyName::ALL_D);
+    if (argc < 2 || argc > 3)
+    {
+        printUsage(argv[0]);
+        return 1;
+    }
 
-    auto pa = new Player(1, StrategyName::RANDOM);
-    auto pb = new Player(1, StrategyName::RANDOM);
-    tournament->run(pa,pb);
+    if (argc == 2 && std::string(argv[1]) == "all")
+    {
+        runRoundRobin();
+        return 0;
+    }
 
-    DEBUG_POINTS("Player A: " << pa->points() << "\nPlayer B: " << pb->points());
+    StrategyName a = StrategyName::NONE;
+    StrategyName b = StrategyName::NONE;
 
+    if (argc == 3)
+    {
+        if (!parseStrategy(argv[2], b))
+        {
+            std::cout << "Invalid strategy: " << argv[2] << "\n";
+            printUsage(argv[0]);
+            return 1;
+        }
+    } 
+    else
+    {
+        b = a;
+    }
+
+    playMatch(a, b);
 
     return 0;
 }

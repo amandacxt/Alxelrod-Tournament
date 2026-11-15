@@ -4,6 +4,12 @@
 
 #define N_ALGORITHMS 5
 
+#if true
+    #define DEBUG_STRATEGY(x) std::cout << x << std::endl
+#else
+    #define DEBUG_STRATEGY(x) ((void)0)
+#endif
+
 int getCompetitorId(int playerId, const std::vector<RoundResult>& history)
 {
     assert(history.size() >= 1);
@@ -60,11 +66,13 @@ Choice strategies::getChoice(const Player& player,
 
 Choice strategies::runAllDAlgorithm()
 {
+    DEBUG_STRATEGY("STRATEGY: runAllDAlgorithm");
     return Choice::D;
 }
 
 Choice strategies::runRandomAlgorithm()
 {
+    DEBUG_STRATEGY("STRATEGY: runRandomAlgorithm");
     auto value = rand() % 2;
     return (value == 0 ? Choice::D : Choice::C);
 }
@@ -73,6 +81,7 @@ Choice strategies::runTitForTatAlgorithm(const Player& player,
                                          const std::vector<RoundResult>& history,
                                          size_t currentRound)
 {
+    DEBUG_STRATEGY("STRATEGY: runTitForTatAlgorithm");
     if (currentRound == 0 /* first round*/)
     {
         return Choice::C;
@@ -87,6 +96,7 @@ Choice strategies::runTesterAlgorithm(const Player& player,
                                       const std::vector<RoundResult>& history,
                                       size_t currentRound)
 {
+    DEBUG_STRATEGY("STRATEGY: runTesterAlgorithm");
     if (currentRound == 0 /* first round*/)
     {
         return Choice::D;
@@ -109,6 +119,7 @@ Choice strategies::runJossAlgorithm(const Player& player,
                                     const std::vector<RoundResult>& history,
                                     size_t currentRound)
 {
+    DEBUG_STRATEGY("STRATEGY: runJossAlgorithm");
     auto tftResult = runTitForTatAlgorithm(player, history, currentRound);
     if(tftResult == Choice::D)
     {
@@ -123,6 +134,7 @@ Choice strategies::chooseAlgorithmRandomly(const Player& player,
                                     const std::vector<RoundResult>& history,
                                     size_t currentRound)
 {
+    DEBUG_STRATEGY("STRATEGY: chooseAlgorithmRandomly");
     static const StrategyName all[] = 
     {
         StrategyName::ALL_D,

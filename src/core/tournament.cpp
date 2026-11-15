@@ -4,10 +4,16 @@
 #include <iostream>
 #include <ostream>
 
-#if false
+#if true
     #define DEBUG_RESULTS(x) std::cout << x << std::endl
 #else
     #define DEBUG_RESULTS(x) ((void)0)
+#endif
+
+#if false
+    #define DEBUG_POINTS(x) std::cout << x << std::endl
+#else
+    #define DEBUG_POINTS(x) ((void)0)
 #endif
 
 void Tournament::startTour()
@@ -25,6 +31,7 @@ void Tournament::startTour()
 
 void Tournament::endTour(int currentTour)
 {
+    DEBUG_POINTS("Player A: " << pa.points() << "\nPlayer B: " << pb.points());
     if(m_playerA->points() > m_playerB->points())
     {
         m_playerA->addWin();

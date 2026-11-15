@@ -20,7 +20,6 @@ class Tournament
   private:
     void startTour();
     void endTour(int currentTour);
-    void endTournament();
     void runRound(size_t currentRound);
 
     void storeResult(size_t currentTurn, const RoundResult& rr);

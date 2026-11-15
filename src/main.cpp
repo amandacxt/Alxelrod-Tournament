@@ -76,28 +76,28 @@ std::pair<int, int> playMatch(StrategyName a, StrategyName b)
     Player pb(2, b);
     tournament.run(&pa, &pb);
 
-    return {pa.wins(), pb.wins()};
+    return {pa.totalPoints(), pb.totalPoints()};
 }
 
 
 void runRoundRobin()
 {
-    std::vector<int> totalWins(ALL_STRATEGIES.size(), 0);
+    std::vector<int> totalPoints(ALL_STRATEGIES.size(), 0);
 
     for (size_t i = 0; i < ALL_STRATEGIES.size(); ++i)
     {
         for (size_t j = i + 1; j < ALL_STRATEGIES.size(); ++j)
         {
             std::cout << "\n " << label(ALL_STRATEGIES[i]) << " vs " << label(ALL_STRATEGIES[j]) << " \n";
-            const auto [winsA, winsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j]);
-            totalWins[i] += winsA;
-            totalWins[j] += winsB;
+            const auto [pointsA, pointsB] = playMatch(ALL_STRATEGIES[i], ALL_STRATEGIES[j]);
+            totalPoints[i] += pointsA;
+            totalPoints[j] += pointsB;
         }
     }
 
     std::cout << "\n--- ALXELROD TOURNAMENT SUMMARY ---" << std::endl;
     for (size_t i = 0; i < ALL_STRATEGIES.size(); ++i)
-        std::cout << label(ALL_STRATEGIES[i]) << ": " << totalWins[i] << std::endl;
+        std::cout << label(ALL_STRATEGIES[i]) << ": " << totalPoints[i] << std::endl;
 }
 
 } // end namespace

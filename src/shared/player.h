@@ -30,26 +30,23 @@ using RoundResult = std::map<int, Choice>;
 class Player
 {
   public:
-    Player(int id) : m_id(id), m_points(0), m_wins(0), m_strategy(NONE) {};
-
-    Player(int id, StrategyName strategy) : m_id(id), m_points(0), m_strategy(strategy) {};
+    Player(int id, StrategyName strategy) : m_id(id), m_points(0), m_totalPoints(0), m_strategy(strategy) {};
 
     int id() const { return m_id; }
     int points() const { return m_points; }
-    int wins() { return m_wins; }
+    int totalPoints() const { return m_totalPoints; }
 
     StrategyName strategy() const { return m_strategy; }
 
     void resetPoints() { m_points = 0; }
-    void resetGame() { resetPoints(); m_wins = 0; }
-    void increasePointsBy(unsigned value) { m_points += value; }
-    void addWin() { m_wins += 1; }
+    void resetGame() { resetPoints();  m_totalPoints = 0;}
+    void increasePointsBy(unsigned value) { m_points += value; m_totalPoints += value; }
 
     void changeStrategy(StrategyName strategy) { m_strategy = strategy; }
 
   private:
     int m_id;
     int m_points;
-    int m_wins;
+    int m_totalPoints;
     StrategyName m_strategy;
 };

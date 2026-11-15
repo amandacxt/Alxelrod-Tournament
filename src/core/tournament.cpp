@@ -31,39 +31,11 @@ void Tournament::startTour()
 
 void Tournament::endTour(int currentTour)
 {
-    DEBUG_POINTS("Player A: " << pa.points() << "\nPlayer B: " << pb.points());
-    if(m_playerA->points() > m_playerB->points())
-    {
-        m_playerA->addWin();
-    }
-    else if(m_playerB->points() > m_playerA->points())
-    {
-        m_playerB->addWin();
-    }
+    DEBUG_POINTS("Player A: " << m_playerA->points() << "\nPlayer B: " << m_playerB->points());
 
     std::cout << "\bTOUR " << currentTour 
             << "\n\b Player A: " << m_playerA->points() 
             << " vs Player B: " << m_playerB->points() <<std::endl;
-}
-
-void Tournament::endTournament()
-{
-    std::cout << "FINAL RESULT" << std::endl;
-
-    if(m_playerA->wins() > m_playerB->wins())
-    {
-        std::cout << "\b Winner: Player A! " << std::endl;
-    }
-    else if(m_playerB->wins() > m_playerA->wins())
-    {
-        std::cout << "\b Winner: Player B! " << std::endl;
-    }
-    else 
-    {
-        std::cout << "\b Tournament tie! " << std::endl;
-    }
-
-    std::cout << "\b Player A: " << m_playerA->wins() << " vs Player B: " << m_playerB->wins() <<std::endl;
 }
 
 void Tournament::run(Player* playerA, Player* playerB)
@@ -82,7 +54,6 @@ void Tournament::run(Player* playerA, Player* playerB)
         }
         endTour(tour);
     }
-    endTournament();
 }
 
 void Tournament::runRound(size_t currentRound)

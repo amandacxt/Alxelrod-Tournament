@@ -28,8 +28,8 @@ int main(int argc, char ** argv)
     //auto pa = new Player(StrategyName::ALL_D);
     //auto pb = new Player(StrategyName::ALL_D);
 
-    auto pa = new Player(StrategyName::RANDOM);
-    auto pb = new Player(StrategyName::RANDOM);
+    auto pa = new Player(1, StrategyName::RANDOM);
+    auto pb = new Player(1, StrategyName::RANDOM);
     tournament->run(pa,pb);
 
     DEBUG_POINTS("Player A: " << pa->points() << "\nPlayer B: " << pb->points());

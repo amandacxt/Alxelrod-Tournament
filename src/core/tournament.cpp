@@ -4,7 +4,7 @@
 #include <iostream>
 #include <ostream>
 
-#if true
+#if false
     #define DEBUG_RESULTS(x) std::cout << x << std::endl
 #else
     #define DEBUG_RESULTS(x) ((void)0)
@@ -15,9 +15,10 @@ void Tournament::startTour()
     if (m_playerA == nullptr || m_playerB == nullptr) 
     {
         std::cout << "Tounament failed to start. Player missing." << std::endl;
+        return;
     }
-    m_playerA->resetGame();
-    m_playerB->resetGame();
+    m_playerA->resetPoints();
+    m_playerB->resetPoints();
 
     clearHistory();
 }
@@ -34,13 +35,13 @@ void Tournament::endTour(int currentTour)
     }
 
     std::cout << "\bTOUR " << currentTour 
-            << "\n\b Player A: " << m_playerA->wins() 
-            << " vs Player B: " << m_playerB->wins() <<std::endl;
+            << "\n\b Player A: " << m_playerA->points() 
+            << " vs Player B: " << m_playerB->points() <<std::endl;
 }
 
 void Tournament::endTournament()
 {
-    std::cout << " FINAL RESULT " << std::endl;
+    std::cout << "FINAL RESULT" << std::endl;
 
     if(m_playerA->wins() > m_playerB->wins())
     {
@@ -62,6 +63,9 @@ void Tournament::run(Player* playerA, Player* playerB)
 {
     m_playerA = playerA;
     m_playerB = playerB;
+    m_playerA->resetGame();
+    m_playerB->resetGame();
+
     for (size_t tour = 0; tour < m_tours; ++tour)
     {
         startTour();
@@ -96,7 +100,7 @@ void Tournament::storeResult(size_t currentRound, const RoundResult& rr)
 
 std::tuple<int, int> Tournament::pointsFromResult(const Choice choiceA, const Choice choiceB)
 {
-    DEBUG_RESULTS("Choice Player A: " << choiceA << "\n Choice Player B: " << choiceB);
+    DEBUG_RESULTS("\nChoice Player A: " << choiceA << "\n Choice Player B: " << choiceB);
 
     if (choiceA == Choice::NO_CHOICE || choiceB == Choice::NO_CHOICE)
     {

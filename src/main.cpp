@@ -32,7 +32,8 @@ const std::vector<StrategyName> ALL_STRATEGIES = {
     StrategyName::TIT_FOR_TAT,
     StrategyName::TESTER,
     StrategyName::JOSS,
-    StrategyName::TIT_FOR_TWO_TATS
+    StrategyName::TIT_FOR_TWO_TATS,
+    StrategyName::GRUDGER
 };
 
 
@@ -42,7 +43,7 @@ void printUsage(const char* program)
               << "  " << program << " <s>        both players use strategy s\n"
               << "  " << program << " <sA> <sB>  player A vs player B\n"
               << "  " << program << " all        round-robin tournament\n"
-              << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=TIT_FOR_TWO_TATS 6=NONE (random)\n";
+              << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=TIT_FOR_TWO_TATS 6=GRUDGER 7=NONE(random)\n";
 }
 
 
@@ -153,7 +154,7 @@ int main(int argc, char ** argv)
     }
     else
     {
-        b = a;   // só uma estratégia: as duas iguais
+        b = a;
     }
 
     playMatch(a, b);

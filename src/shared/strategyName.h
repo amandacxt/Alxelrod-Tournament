@@ -8,6 +8,7 @@ enum StrategyName
     TESTER,
     JOSS,
     TIT_FOR_TWO_TATS,
+    GRUDGER,
     NONE
 };
 
@@ -21,6 +22,7 @@ inline const char* label(StrategyName s)
     case StrategyName::TESTER:              return "TESTER";
     case StrategyName::JOSS:                return "JOSS";
     case StrategyName::TIT_FOR_TWO_TATS:    return "TIT_FOR_TWO_TATS";
+    case StrategyName::GRUDGER:             return "GRUDGER";
     default:                                return "NONE";
     }
 }

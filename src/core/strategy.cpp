@@ -53,6 +53,9 @@ Choice strategies::getChoice(const Player& player,
         case StrategyName::TIT_FOR_TWO_TATS:
             return strategies::runTitForTwoTatsAlgorithm(player, history, currentRound);
         
+        case StrategyName::GRUDGER:
+            return strategies::runGrudgerAlgorithm(player, history, currentRound);
+        
         default:
             return Choice::NO_CHOICE;
     };
@@ -138,4 +141,26 @@ Choice strategies::runTitForTwoTatsAlgorithm(const Player& player,
     const bool defectedBeforeIt = history[currentRound - 2].at(competitorId) == Choice::D;
 
     return (defectedLast && defectedBeforeIt) ? Choice::D : Choice::C;
+}
+
+Choice strategies::runGrudgerAlgorithm(const Player& player,
+                                       const std::vector<RoundResult>& history,
+                                       size_t currentRound)
+{
+    DEBUG_STRATEGY("STRATEGY: runGrudgerAlgorithm");
+    if (currentRound == 0 /* first round */)
+    {
+        return Choice::C;
+    }
+
+    auto competitorId = getCompetitorId(player.id(), history);
+    for (size_t round = 0; round < currentRound; ++round)
+    {
+        if (history[round].at(competitorId) == Choice::D)
+        {
+            return Choice::D;
+        }
+    }
+
+    return Choice::C;
 }

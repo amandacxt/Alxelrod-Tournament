@@ -39,4 +39,10 @@ namespace strategies
     Choice runTitForTwoTatsAlgorithm(const Player& player,
                                      const std::vector<RoundResult>& history,
                                      size_t currentRound);
+    
+    /* The strategy cooperates from the beginning. In case a D is played against it,
+       it will only plays D in the next rounds. Otherwise, it keeps cooperating */
+    Choice runGrudgerAlgorithm(const Player& player,
+                               const std::vector<RoundResult>& history,
+                               size_t currentRound);
 };

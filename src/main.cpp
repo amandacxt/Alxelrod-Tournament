@@ -7,6 +7,7 @@
 // Guimaraes Caixeta Silva Amanda, 2026
 // -------------------------------------------
 
+#include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -95,9 +96,20 @@ void runRoundRobin()
         }
     }
 
-    std::cout << "\n--- ALXELROD TOURNAMENT SUMMARY ---" << std::endl;
-    for (size_t i = 0; i < ALL_STRATEGIES.size(); ++i)
-        std::cout << label(ALL_STRATEGIES[i]) << ": " << totalPoints[i] << std::endl;
+    // Sort strategies from more to less points
+    std::vector<size_t> order(ALL_STRATEGIES.size());
+    for (size_t i = 0; i < order.size(); ++i)
+        order[i] = i;
+    std::sort(order.begin(), order.end(),
+              [&](size_t x, size_t y) { return totalPoints[x] > totalPoints[y]; });
+
+    
+    std::cout << "\n--- ALXELROD TOURNAMENT RANKING ---" << std::endl;
+    for (size_t rank = 0; rank < order.size(); ++rank)
+    {
+        const size_t i = order[rank];
+        std::cout << rank + 1 << ". " << label(ALL_STRATEGIES[i]) << ": " << totalPoints[i] << std::endl;
+    }
 }
 
 } // end namespace

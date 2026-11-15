@@ -22,7 +22,7 @@
 
 int main(int argc, char ** argv)
 {
-    auto tournament = new Tournament(2);
+    auto tournament = new Tournament(3 /*tours=*/, 10 /*rounds=*/);
     srand(time(nullptr));
 
     //auto pa = new Player(StrategyName::ALL_D);

@@ -2,6 +2,7 @@
 
 #include "strategy.h"
 #include <iostream>
+#include <ostream>
 
 #if true
     #define DEBUG_RESULTS(x) std::cout << x << std::endl
@@ -9,15 +10,68 @@
     #define DEBUG_RESULTS(x) ((void)0)
 #endif
 
+void Tournament::startTour()
+{
+    if (m_playerA == nullptr || m_playerB == nullptr) 
+    {
+        std::cout << "Tounament failed to start. Player missing." << std::endl;
+    }
+    m_playerA->resetGame();
+    m_playerB->resetGame();
+
+    clearHistory();
+}
+
+void Tournament::endTour(int currentTour)
+{
+    if(m_playerA->points() > m_playerB->points())
+    {
+        m_playerA->addWin();
+    }
+    else if(m_playerB->points() > m_playerA->points())
+    {
+        m_playerB->addWin();
+    }
+
+    std::cout << "\bTOUR " << currentTour 
+            << "\n\b Player A: " << m_playerA->wins() 
+            << " vs Player B: " << m_playerB->wins() <<std::endl;
+}
+
+void Tournament::endTournament()
+{
+    std::cout << " FINAL RESULT " << std::endl;
+
+    if(m_playerA->wins() > m_playerB->wins())
+    {
+        std::cout << "\b Winner: Player A! " << std::endl;
+    }
+    else if(m_playerB->wins() > m_playerA->wins())
+    {
+        std::cout << "\b Winner: Player B! " << std::endl;
+    }
+    else 
+    {
+        std::cout << "\b Tournament tie! " << std::endl;
+    }
+
+    std::cout << "\b Player A: " << m_playerA->wins() << " vs Player B: " << m_playerB->wins() <<std::endl;
+}
 
 void Tournament::run(Player* playerA, Player* playerB)
 {
     m_playerA = playerA;
     m_playerB = playerB;
-    for (size_t round = 0; round < m_rounds; ++round) 
+    for (size_t tour = 0; tour < m_tours; ++tour)
     {
-        runRound(round);
+        startTour();
+        for (size_t round = 0; round < m_rounds; ++round)
+        {
+            runRound(round);
+        }
+        endTour(tour);
     }
+    endTournament();
 }
 
 void Tournament::runRound(size_t currentRound)

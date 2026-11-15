@@ -31,7 +31,8 @@ const std::vector<StrategyName> ALL_STRATEGIES = {
     StrategyName::RANDOM,
     StrategyName::TIT_FOR_TAT,
     StrategyName::TESTER,
-    StrategyName::JOSS
+    StrategyName::JOSS,
+    StrategyName::TIT_FOR_TWO_TATS
 };
 
 
@@ -41,7 +42,7 @@ void printUsage(const char* program)
               << "  " << program << " <s>        both players use strategy s\n"
               << "  " << program << " <sA> <sB>  player A vs player B\n"
               << "  " << program << " all        round-robin tournament\n"
-              << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=NONE (random)\n";
+              << "Strategies: 0=ALL_D 1=RANDOM 2=TIT_FOR_TAT 3=TESTER 4=JOSS 5=TIT_FOR_TWO_TATS 6=NONE (random)\n";
 }
 
 

@@ -33,4 +33,10 @@ namespace strategies
     Choice runJossAlgorithm(const Player& player,
                             const std::vector<RoundResult>& history,
                             size_t currentRound);
+
+    /* For the first two rounds returns C, afterwards returns D only if the
+       competitor played D in both of the two previous rounds, otherwise returns C */
+    Choice runTitForTwoTatsAlgorithm(const Player& player,
+                                     const std::vector<RoundResult>& history,
+                                     size_t currentRound);
 };

@@ -8,6 +8,10 @@
 // -------------------------------------------
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+#include <vector>
 
 #include "shared/strategyName.h"
 #include "shared/player.h"
@@ -18,8 +22,8 @@
 namespace
 {
 
-const size_t TOURS  = 1;
-const size_t ROUNDS = 5;
+const size_t TOURS  = 5;
+const size_t ROUNDS = 200;
 
 const std::vector<StrategyName> ALL_STRATEGIES = {
     StrategyName::ALL_D,
@@ -40,6 +44,12 @@ void printUsage(const char* program)
 }
 
 
+StrategyName randomStrategy()
+{
+    return ALL_STRATEGIES[rand() % ALL_STRATEGIES.size()];
+}
+
+
 bool parseStrategy(const char* arg, StrategyName& out)
 {
     char* end = nullptr;
@@ -49,7 +59,12 @@ bool parseStrategy(const char* arg, StrategyName& out)
         return false;
 
     out = static_cast<StrategyName>(n);
-    std::cout << "\n " << label(out) << std::endl;
+
+    if (out == StrategyName::NONE)
+    {
+        out = randomStrategy();
+        std::cout << "Random strategy chosen: " << label(out) << "\n";
+    }
     return true;
 }
 
@@ -106,6 +121,13 @@ int main(int argc, char ** argv)
     StrategyName a = StrategyName::NONE;
     StrategyName b = StrategyName::NONE;
 
+    if (!parseStrategy(argv[1], a))
+    {
+        std::cout << "Invalid strategy: " << argv[1] << "\n";
+        printUsage(argv[0]);
+        return 1;
+    }
+
     if (argc == 3)
     {
         if (!parseStrategy(argv[2], b))
@@ -114,10 +136,10 @@ int main(int argc, char ** argv)
             printUsage(argv[0]);
             return 1;
         }
-    } 
+    }
     else
     {
-        b = a;
+        b = a;   // só uma estratégia: as duas iguais
     }
 
     playMatch(a, b);

@@ -2,9 +2,7 @@
 #include <cassert>
 #include <cstdlib>
 
-#define N_ALGORITHMS 5
-
-#if true
+#if false
     #define DEBUG_STRATEGY(x) std::cout << x << std::endl
 #else
     #define DEBUG_STRATEGY(x) ((void)0)
@@ -19,7 +17,7 @@ int getCompetitorId(int playerId, const std::vector<RoundResult>& history)
 
     for (const auto r : firstResult) 
     {
-        if(r.first == playerId)
+        if(r.first != playerId)
         {
             return r.first;
         }
@@ -30,19 +28,12 @@ int getCompetitorId(int playerId, const std::vector<RoundResult>& history)
     return 0;
 }
 
-Choice strategies::getChoice(const Player& player,
-                             const std::vector<RoundResult>& history,
-                             size_t currentRound)
-{
-    return getChoice(player, player.strategy(), history, currentRound);
-}
 
 Choice strategies::getChoice(const Player& player,
-                             const StrategyName strategy,
                              const std::vector<RoundResult>& history,
                              size_t currentRound)
 {
-    switch (strategy)
+    switch (player.strategy())
     {
         case StrategyName::ALL_D:
             return strategies::runAllDAlgorithm();
@@ -60,7 +51,7 @@ Choice strategies::getChoice(const Player& player,
             return strategies::runJossAlgorithm(player, history, currentRound);
         
         default:
-            return chooseAlgorithmRandomly(player, history, currentRound);
+            return Choice::NO_CHOICE;
     };
 }
 
@@ -104,9 +95,8 @@ Choice strategies::runTesterAlgorithm(const Player& player,
 
     auto competitorId = getCompetitorId(player.id(), history);
 
-    // Check competitor's first round choice
-    auto competitorChoice = history[0 /* first round*/].at(competitorId);
-    if (competitorChoice == Choice::D) 
+    // Check competitor's second round choice
+    if (currentRound >= 2 && history[1].at(competitorId) == Choice::D)
     {
         return strategies::runTitForTatAlgorithm(player, history, currentRound);
     }
@@ -127,24 +117,4 @@ Choice strategies::runJossAlgorithm(const Player& player,
     }
 
     return rand() % 10 == 0 ? Choice::D : Choice::C;
-}
-
-
-Choice strategies::chooseAlgorithmRandomly(const Player& player,
-                                    const std::vector<RoundResult>& history,
-                                    size_t currentRound)
-{
-    DEBUG_STRATEGY("STRATEGY: chooseAlgorithmRandomly");
-    static const StrategyName all[] = 
-    {
-        StrategyName::ALL_D,
-        StrategyName::RANDOM,
-        StrategyName::TIT_FOR_TAT,
-        StrategyName::TESTER,
-        StrategyName::JOSS
-    };
-
-    auto strategy = all[rand() % N_ALGORITHMS];
-
-    return getChoice(player, strategy, history, currentRound);
 }

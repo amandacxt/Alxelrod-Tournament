@@ -10,11 +10,6 @@ namespace strategies
     Choice getChoice(const Player& player,
                      const std::vector<RoundResult>& history,
                      size_t currentRound);
-    
-    Choice getChoice(const Player& player,
-                     const StrategyName strategy,
-                     const std::vector<RoundResult>& history,
-                     size_t currentRound);
 
     /* Returns only choice D*/
     Choice runAllDAlgorithm();
@@ -34,11 +29,8 @@ namespace strategies
                               const std::vector<RoundResult>& history,
                               size_t currentRound);
 
+    /* Runs the TIT-FOR-TAT algorithm. Replaces a C with a D on time out of ten*/
     Choice runJossAlgorithm(const Player& player,
                             const std::vector<RoundResult>& history,
                             size_t currentRound);
-
-    Choice chooseAlgorithmRandomly(const Player& player,
-                                   const std::vector<RoundResult>& history,
-                                   size_t currentRound);
 };

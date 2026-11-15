@@ -4,7 +4,7 @@
 #include <iostream>
 #include <ostream>
 
-#if true
+#if false
     #define DEBUG_RESULTS(x) std::cout << x << std::endl
 #else
     #define DEBUG_RESULTS(x) ((void)0)
@@ -107,7 +107,7 @@ void Tournament::storeResult(size_t currentRound, const RoundResult& rr)
 
 std::tuple<int, int> Tournament::pointsFromResult(const Choice choiceA, const Choice choiceB)
 {
-    DEBUG_RESULTS("\nChoice Player A: " << choiceA << "\n Choice Player B: " << choiceB);
+    DEBUG_RESULTS("\nChoice Player A: " << choiceA << "\nChoice Player B: " << choiceB);
 
     if (choiceA == Choice::NO_CHOICE || choiceB == Choice::NO_CHOICE)
     {
